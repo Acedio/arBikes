@@ -31,7 +31,7 @@ var testBikes = [
     bikeId: 'url11',
   },
   {
-    user: 'goo',
+    user: 'foo',
     location: {
       lat: 47.649753,
       lng: -122.351683
@@ -65,5 +65,5 @@ const ssl_options = {
 
 console.log('1.calling for server to start listening from localhost ' + port +
             ' https on ' + https_port);
-app.listen(port)
+app.listen(port);
 https.createServer(ssl_options, app).listen(https_port);
