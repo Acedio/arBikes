@@ -10,7 +10,7 @@ var server = http.createServer(app);
 var io = socketIo(server);
 
 app.use(express.static(__dirname + '/node_modules')); 
-app.use('/static', express.static('static'));
+app.use(express.static(__dirname + '/static')); 
 
 app.get('/', function(req, res,next) {
   console.log('2. sending file index.html');

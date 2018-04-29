@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <title>jsQR Demo</title>
-  <script src="/static/jsQR.js"></script>
+  <script src="jsQR.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Ropa+Sans" rel="stylesheet">
   <style>
     body {
@@ -108,6 +108,7 @@
           outputMessage.hidden = true;
           outputData.parentElement.hidden = false;
           outputData.innerText = code.data;
+          alert(code.data);
         } else {
           outputMessage.hidden = false;
           outputData.parentElement.hidden = true;
