@@ -1,3 +1,7 @@
+# Keys etc
+encryption
+encryption/
+
 # Exccessive gitignore from Node.gitignore github/gitignore.
 # Logs
 logs
