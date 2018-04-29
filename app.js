@@ -16,5 +16,6 @@ app.get('/', function(req, res,next) {
 });
 
 //1
-console.log('1.calling for server to start listening from localhost 4200');
-server.listen(4200);
+var port = 4200
+console.log('1.calling for server to start listening from localhost ' + port);
+server.listen(port);
