@@ -10,27 +10,41 @@ function getAllBikes() {
     console.log(JSON.stringify(bikes));
     // Process all the bikes!
     for (let bike of bikes) {
-      addMarker(bike);
+      addMarker(bike.location);
     }
   });
 }
 
 function initMap() {
-  var haightAshbury = { lat: 37.769, lng: -122.446 };
+  var googleSeattle = {
+    lat: 47.649297,
+    lng: -122.350535
+  };
 
   map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: haightAshbury,
+    zoom: 17,
+    center: googleSeattle,
     mapTypeId: 'terrain'
   });
 
   // This event listener will call addMarker() when the map is clicked.
   map.addListener('click', function (event) {
-    addMarker(event.latLng);
+    let location = {
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng(),
+    };
+    addMarker(location);
+    $.post('/addBike', {
+      user: 'meee',
+      location: {
+        lat: location.lat,
+        lng: location.lng,
+      },
+      bikeId: 'idd',
+    }, function(data){});
   });
 
   // Adds a marker at the center of the map.
-  //addMarker(haightAshbury);
   getAllBikes();
 }
 
