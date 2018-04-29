@@ -1,11 +1,16 @@
 <html>
+<head>
+  <script src="maps-markers.js"></script>    
+  <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA13QFADYjV4lLRg_HPrl622vVb4L4v8s4&callback=initMap">
+  </script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+</head>
 <body>
-  <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css">
   <div class="div-wrapper">
-    <iframe
-      class="google-maps-container"
-      src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA13QFADYjV4lLRg_HPrl622vVb4L4v8s4
-        &q=Space+Needle,Seattle+WA" allowfullscreen>
+    <div class="google-maps-container"
+      id="map">
     </iframe>
   </div>
 </body>

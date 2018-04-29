@@ -16,6 +16,15 @@ app.get('/', function(req, res,next) {
   res.sendFile(__dirname + '/index.html');
 });
 
+var bikeCoordinates = [
+  { lat: 37.769, lng: -122.446 },
+  { lat: 37.779, lng: -122.446 },
+];
+
+app.get('/getBikes', function(req, res, next) {
+  res.send(bikeCoordinates);
+});
+
 //1
 console.log('1.calling for server to start listening from localhost 4200');
 server.listen(4200);
