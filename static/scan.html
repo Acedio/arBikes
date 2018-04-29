@@ -53,7 +53,7 @@
   </style>
 </head>
 <body>
-  <h1>jsQR Demo</h1>
+  <h1>Scan A Code!</h1>
   <a id="githubLink" href="https://github.com/cozmo/jsQR">View documentation on Github</a>
   <p>Pure JavaScript QR code decoding library.</p>
   <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
@@ -109,12 +109,32 @@
           outputData.parentElement.hidden = false;
           outputData.innerText = code.data;
           alert(code.data);
+          positionAndAlert();
         } else {
           outputMessage.hidden = false;
           outputData.parentElement.hidden = true;
         }
       }
       requestAnimationFrame(tick);
+    }
+
+    function positionAndAlert() {
+      var options = {
+        enableHighAccuracy: true,
+        maximumAge: 30*1000
+      };
+
+      function success(pos) {
+        var crd = pos.coords;
+
+        alert(`Your current position is: Latitude : ${crd.latitude} Longitude: ${crd.longitude} More or less ${crd.accuracy} meters.`);
+      }
+
+      function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+      }
+
+      navigator.geolocation.getCurrentPosition(success, error, options);
     }
   </script>
 </body>
