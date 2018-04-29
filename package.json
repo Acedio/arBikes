@@ -1,0 +1,23 @@
+{
+  "name": "arbikes",
+  "version": "1.0.0",
+  "description": "Bikes in AR.",
+  "main": "app.js",
+  "dependencies": {
+    "jsqr": "^1.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo lol"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hubatish/arBikes.git"
+  },
+  "author": "Zach Howell & Josh Simmons",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/hubatish/arBikes/issues"
+  },
+  "homepage": "https://github.com/hubatish/arBikes#readme"
+}
