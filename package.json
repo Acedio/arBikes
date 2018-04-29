@@ -4,6 +4,7 @@
   "description": "Bikes in AR.",
   "main": "app.js",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "jsqr": "^1.0.4",
     "socket.io": "^2.1.0"
