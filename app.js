@@ -2,6 +2,8 @@
 var express = require('express');
 var http = require('http');
 var socketIo = require('socket.io');
+var fs = require('fs');
+var https = require('https');
 
 var app = express();
 var server = http.createServer(app);  
@@ -16,7 +18,14 @@ app.get('/', function(req, res,next) {
   res.sendFile(__dirname + '/index.html');
 });
 
-//1
+const options = {
+      cert: fs.readFileSync('encryption/fullchain.pem'),
+      key: fs.readFileSync('encryption/privkey.pem')
+};
+
 var port = 4200
-console.log('1.calling for server to start listening from localhost ' + port);
-server.listen(port);
+var https_port = 8443
+console.log('1.calling for server to start listening from localhost ' + port +
+            ' https on ' + https_port);
+app.listen(port)
+https.createServer(options, app).listen(https_port);
