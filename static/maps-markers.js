@@ -4,6 +4,7 @@
 // The user can then click an option to hide, show or delete the markers.
 let map;
 let markers = [];
+var scores;
 
 function formatScore(scores) {
   var str = "<ol>";
@@ -17,7 +18,7 @@ function formatScore(scores) {
 function getAllBikes() {
   $.get('/getBikes', function(bikes) {
     console.log(JSON.stringify(bikes));
-    var scores = {};
+    scores = {};
     // Process all the bikes!
     for (let bike of bikes) {
       addMarker(bike);
@@ -65,34 +66,29 @@ function initMap() {
     mapTypeId: 'terrain'
   });
 
-  // This event listener will call addMarker() when the map is clicked.
-/*  map.addListener('click', function (event) {
-    let location = {
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng(),
-    };
-    addMarker(location);
-    $.post('/addBike', {
-      user: bikeUserName,
-      location: {
-        lat: location.lat,
-        lng: location.lng,
-      },
-      bikeId: 'idd',
-    }, function(data){});
-  });*/
-
   // Adds a marker at the center of the map.
   getAllBikes();
 }
 
 // Adds a marker to the map and push to the array.
 function addMarker(bike) {
+  let bikeId = bike.bikeId.replace(/[\W_]+/g,'');
+  var infoWindow = new google.maps.InfoWindow({
+    content: '<div id="' + bikeId + '"></div>'
+  });
   var marker = new google.maps.Marker({
     position: bike.location,
     map: map,
     icon: bike.user == bikeUserName ? myBikeImage : theirBikeImage,
     shape: shape,
+  });
+  marker.addListener('click', function() {
+    infoWindow.open(map, marker);    
+    $('#' + bikeId).load('info-window.html', function() {
+      $('#bike-info-title').text('Bike: ' + bikeId.replace('httpwww','').replace('com',''));
+      $('#bike-info-owner').text('Owner: ' + bike.user);
+      $('#bike-info-owner-score').text('Score: ' + scores[bike.user]);  
+    });
   });
   markers.push(marker);
 }
