@@ -10,24 +10,28 @@ function getAllBikes() {
     console.log(JSON.stringify(bikes));
     // Process all the bikes!
     for (let bike of bikes) {
-      addMarker(bike.location);
+      addMarker(bike);
     }
   });
 }
 
-var image;
+var myBikeImage;
+var theirBikeImage;
 var shape;
 
-function initMap() {
-  image = {
-    url: 'images/blueBike.png',
-    // This marker is 20 pixels wide by 32 pixels high.
+function buildBikeImage(imageName) {
+  var bikeImage = {
+    url: imageName,
     size: new google.maps.Size(32, 32),
-    // The origin for this image is (0, 0).
     origin: new google.maps.Point(0, 0),
-    // The anchor for this image is the base of the flagpole at (0, 32).
     anchor: new google.maps.Point(16, 32)
   };
+  return bikeImage;
+}
+
+function initMap() {
+  myBikeImage = buildBikeImage('images/blueBike.png');
+  theirBikeImage = buildBikeImage('images/redBike.png');
   
   shape = {
     coords: [1, 1, 1, 32, 32, 1, 32, 32],
@@ -46,7 +50,7 @@ function initMap() {
   });
 
   // This event listener will call addMarker() when the map is clicked.
-  map.addListener('click', function (event) {
+/*  map.addListener('click', function (event) {
     let location = {
       lat: event.latLng.lat(),
       lng: event.latLng.lng(),
@@ -60,18 +64,18 @@ function initMap() {
       },
       bikeId: 'idd',
     }, function(data){});
-  });
+  });*/
 
   // Adds a marker at the center of the map.
   getAllBikes();
 }
 
 // Adds a marker to the map and push to the array.
-function addMarker(location) {
+function addMarker(bike) {
   var marker = new google.maps.Marker({
-    position: location,
+    position: bike.location,
     map: map,
-    icon: image,
+    icon: bike.user == bikeUserName ? myBikeImage : theirBikeImage,
     shape: shape,
   });
   markers.push(marker);
