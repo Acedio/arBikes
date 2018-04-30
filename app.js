@@ -5,6 +5,7 @@ var bodyParser = require("body-parser");
 var socketIo = require('socket.io');
 var fs = require('fs');
 var https = require('https');
+var validate = require('./static/validate.js')
 
 var app = express();
 var server = http.createServer(app);  
@@ -46,21 +47,45 @@ app.get('/getBikes', function(req, res, next) {
   res.send(bikes);
 });
 
-/** Takes {user, location: {lat, lng}, bikeId} */
+/** Takes {user, location: {lat, lng, acc}, bikeId} */
 app.post('/addBike', function(req, res, next) {
-  let bike = req.body;
-  bike.location = {
-    lat: parseFloat(bike.location.lat),
-    lng: parseFloat(bike.location.lng),
+  found = {}
+  found.user = req.body.user;
+  found.location = {
+    lat: parseFloat(req.body.location.lat),
+    lng: parseFloat(req.body.location.lng),
+    acc: parseFloat(req.body.location.acc),
   };
-  bikes.push(bike);
+  if (!validate.validateLocation(found.location)) {
+    console.log('Invalid location: ' + found.location);
+    return;
+  }
+  found.bikeId = req.body.bikeId;
+  if (!validate.validateCode(found.bikeId)) {
+    console.log('Invalid bikeId: ' + found.bikeId);
+    return;
+  }
+  for (var bike in bikes) {
+    if (bikes[bike].bikeId == found.bikeId) {
+      if (bikes[bike].user == found.user) {
+        res.send("You already own this bike!");
+        return;
+      } else {
+        res.send("Stolen!");
+        bikes[bike] = found
+        return;
+      }
+    }
+  }
+  bikes.push(found);
+  res.send("Claimed!");
 });
 
 var port = 4200
 var https_port = 8443
 const ssl_options = {
-      cert: fs.readFileSync('encryption/fullchain.pem'),
-      key: fs.readFileSync('encryption/privkey.pem')
+  cert: fs.readFileSync('encryption/fullchain.pem'),
+  key: fs.readFileSync('encryption/privkey.pem')
 };
 
 console.log('1.calling for server to start listening from localhost ' + port +
