@@ -56,6 +56,9 @@
 </head>
 <body>
   <h1>Scan a Bike!</h1>
+  <form name="scanform">
+    <input type="text" name="usernameText" id="usernameText" value="testuser"/>
+  </form>
   <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
   <canvas id="canvas" hidden></canvas>
   <div id="output" hidden>
@@ -108,7 +111,7 @@
           outputMessage.hidden = true;
           outputData.parentElement.hidden = false;
           outputData.innerText = code.data;
-          if (validateCode(code.data)) {
+          if (validate.validateCode(code.data)) {
             attachPositionAndSendData(code.data);
           }
         } else {
@@ -129,18 +132,23 @@
       };
 
       function success(pos) {
+        var username = $("#usernameText").val();
         var crd = pos.coords;
+        var location = {
+          lat: crd.latitude,
+          lng: crd.longitude,
+          acc: crd.accuracy,
+        };
 
-        if (validatePos(crd)) {
+        if (validate.validateLocation(location)) {
           $.post('/addBike', {
-            user: 'scan user',
-            location: {
-              lat: crd.latitude,
-              lng: crd.longitude,
-            },
+            user: username,
+            location: location,
             bikeId: data,
-          }, function(res){});
-          alert(`Data: ${data}\nLatitude : ${crd.latitude}\nLongitude: ${crd.longitude}\nMore or less ${crd.accuracy} meters.`);
+          }, function(res){
+            alert(res);
+          });
+          // alert(`User: ${username}\nData: ${data}\nLatitude : ${location.lat}\nLongitude: ${location.lat}\nMore or less ${location.acc} meters.`);
         }
       }
 
