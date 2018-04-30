@@ -72,11 +72,23 @@ function initMap() {
 
 // Adds a marker to the map and push to the array.
 function addMarker(bike) {
+  let bikeId = bike.bikeId.replace(/[\W_]+/g,'');
+  var infoWindow = new google.maps.InfoWindow({
+    content: '<div id="' + bikeId + '"></div>'
+  });
   var marker = new google.maps.Marker({
     position: bike.location,
     map: map,
     icon: bike.user == bikeUserName ? myBikeImage : theirBikeImage,
     shape: shape,
+  });
+  marker.addListener('click', function() {
+    infoWindow.open(map, marker);    
+    $('#' + bikeId).load('info-window.html', function() {
+      $('#bike-info-title').text('Bike');
+      $('#bike-info-owner').text('Owner: ' + bike.user);
+      $('#bike-info-owner-score').text('Score: 12');  
+    });
   });
   markers.push(marker);
 }
