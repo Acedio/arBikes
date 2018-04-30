@@ -22,15 +22,15 @@ function initMap() {
   image = {
     url: 'images/blueBike.png',
     // This marker is 20 pixels wide by 32 pixels high.
-    size: new google.maps.Size(80, 80),
+    size: new google.maps.Size(32, 32),
     // The origin for this image is (0, 0).
     origin: new google.maps.Point(0, 0),
     // The anchor for this image is the base of the flagpole at (0, 32).
-    anchor: new google.maps.Point(40, 80)
+    anchor: new google.maps.Point(16, 32)
   };
   
   shape = {
-    coords: [5, 5, 5, 80, 74, 80, 74, 5],
+    coords: [1, 1, 1, 32, 32, 1, 32, 32],
     type: 'poly'
   };
 
