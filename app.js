@@ -17,33 +17,14 @@ app.use(express.static(__dirname + '/node_modules'));
 app.use(express.static(__dirname + '/static')); 
 
 app.get('/', function(req, res,next) {
-  console.log('2. sending file index.html');
   res.sendFile(__dirname + '/index.html');
 });
 
-var testBikes = [
-  {
-    user: 'goo',
-    location: {
-      lat: 47.649297,
-      lng: -122.350535
-    },
-    bikeId: 'url11',
-  },
-  {
-    user: 'foo',
-    location: {
-      lat: 47.649753,
-      lng: -122.351683
-    },
-    bikeId: 'url12',
-  },
-];
-
-var bikes = testBikes;
+var bikes = {};
 
 app.get('/getBikes', function(req, res, next) {
-  res.send(bikes);
+  // Return all the values (no keys) of the bikes dictionary.
+  res.send(Object.keys(bikes).map(function(key){ return bikes[key];}));
 });
 
 /** Takes {user, location: {lat, lng, acc}, bikeId} */
@@ -76,7 +57,7 @@ app.post('/addBike', function(req, res, next) {
       }
     }
   }
-  bikes.push(found);
+  bikes[found.bikeId] = found;
   res.send("Claimed!");
 });
 
@@ -87,7 +68,6 @@ const ssl_options = {
   key: fs.readFileSync('encryption/privkey.pem')
 };
 
-console.log('1.calling for server to start listening from localhost ' + port +
-            ' https on ' + https_port);
+console.log('start listening on port ' + port + ', https on ' + https_port);
 app.listen(port);
 https.createServer(ssl_options, app).listen(https_port);

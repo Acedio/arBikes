@@ -64,6 +64,9 @@
     <div id="outputMessage">No QR code detected.</div>
     <div hidden><b>Data:</b> <span id="outputData"></span></div>
   </div>
+  <div class="div-buttons">
+    <h1><a href="/">Map!</a></h1>
+  </div>
   <script>
     var video = document.createElement("video");
     var canvasElement = document.getElementById("canvas");
@@ -109,9 +112,11 @@
           drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
           outputMessage.hidden = true;
           outputData.parentElement.hidden = false;
-          outputData.innerText = code.data;
           if (validate.validateCode(code.data)) {
+            outputData.innerText = code.data;
             attachPositionAndSendData(code.data);
+          } else {
+            outputData.innerText = 'INVALID CODE! ' + code.data;
           }
         } else {
           outputMessage.hidden = false;
