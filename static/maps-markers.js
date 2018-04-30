@@ -53,7 +53,7 @@ function initMap() {
     };
     addMarker(location);
     $.post('/addBike', {
-      user: 'meee',
+      user: bikeUserName,
       location: {
         lat: location.lat,
         lng: location.lng,

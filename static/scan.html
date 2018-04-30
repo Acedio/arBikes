@@ -3,6 +3,8 @@
   <meta charset="utf-8">
   <title>Scan a Bike!</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="user-name.js"></script>
   <script src="validate.js"></script>
   <script src="jsQR.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Ropa+Sans" rel="stylesheet">
@@ -56,9 +58,6 @@
 </head>
 <body>
   <h1>Scan a Bike!</h1>
-  <form name="scanform">
-    <input type="text" name="usernameText" id="usernameText" value="testuser"/>
-  </form>
   <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
   <canvas id="canvas" hidden></canvas>
   <div id="output" hidden>
@@ -132,7 +131,7 @@
       };
 
       function success(pos) {
-        var username = $("#usernameText").val();
+        var username = bikeUserName;
         var crd = pos.coords;
         var location = {
           lat: crd.latitude,

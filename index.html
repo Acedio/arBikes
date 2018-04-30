@@ -1,10 +1,12 @@
 <html>
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
   <script src="maps-markers.js"></script>
+  <script src="user-name.js"></script>
   <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA13QFADYjV4lLRg_HPrl622vVb4L4v8s4&callback=initMap">
   </script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
 </head>
 <body>
   <link rel="stylesheet" href="index.css">
@@ -14,8 +16,8 @@
   </div>
   <div class="pop-up-panel" hidden>
     <form action="javascript:submitName()">
-      <label for="user_name">Enter name:</label>
-      <input id="user_name" type="text" name="name_field" value="Google">
+      <label for="user-name">Enter name:</label>
+      <input id="user-name" type="text" name="name-field" value="Google">
       <input type="submit" value="OK">
     </form>
   </div>  
