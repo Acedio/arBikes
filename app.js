@@ -5,6 +5,7 @@ var bodyParser = require("body-parser");
 var socketIo = require('socket.io');
 var fs = require('fs');
 var https = require('https');
+var validate = require('./static/validate.js')
 
 var app = express();
 var server = http.createServer(app);  
@@ -52,7 +53,12 @@ app.post('/addBike', function(req, res, next) {
   bike.location = {
     lat: parseFloat(bike.location.lat),
     lng: parseFloat(bike.location.lng),
+    acc: parseFloat(bike.location.acc),
   };
+  if (!validate.validateLocation(bike.location)) {
+    console.log('Invalid location: ' + bike.location);
+    return;
+  }
   bikes.push(bike);
 });
 

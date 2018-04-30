@@ -108,7 +108,7 @@
           outputMessage.hidden = true;
           outputData.parentElement.hidden = false;
           outputData.innerText = code.data;
-          if (validateCode(code.data)) {
+          if (validate.validateCode(code.data)) {
             attachPositionAndSendData(code.data);
           }
         } else {
@@ -131,16 +131,19 @@
       function success(pos) {
         var crd = pos.coords;
 
-        if (validatePos(crd)) {
+        var location = {
+          lat: crd.latitude,
+          lng: crd.longitude,
+          acc: crd.accuracy,
+        };
+
+        if (validate.validateLocation(location)) {
           $.post('/addBike', {
             user: 'scan user',
-            location: {
-              lat: crd.latitude,
-              lng: crd.longitude,
-            },
+            location: location,
             bikeId: data,
           }, function(res){});
-          alert(`Data: ${data}\nLatitude : ${crd.latitude}\nLongitude: ${crd.longitude}\nMore or less ${crd.accuracy} meters.`);
+          alert(`Data: ${data}\nLatitude : ${location.lat}\nLongitude: ${location.lat}\nMore or less ${location.acc} meters.`);
         }
       }
 
