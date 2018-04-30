@@ -131,7 +131,7 @@
       var options = {
         enableHighAccuracy: true,
         // Wait 10 seconds.
-        timeout: 10*1000,
+        timeout: 10 * 1000,
         // Get a new (current) position.
         maximumAge: 0
       };
@@ -158,7 +158,7 @@
       }
 
       function error(err) {
-        (`ERROR(${err.code}): ${err.message}`);
+        alert(`Error getting your coordinates, please scan again.\n\nERROR(${err.code}): ${err.message}`);
       }
 
       navigator.geolocation.getCurrentPosition(success, error, options);
