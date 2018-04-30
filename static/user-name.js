@@ -4,7 +4,7 @@ bikeUserName = '';
 $(document).ready(function() {
   bikeUserName = Cookies.get('bikeUserName');
   // coookies returns actual string value undefined.
-  if (bikeUserName == 'undefined') {
+  if (bikeUserName == 'undefined' || bikeUserName == null) {
     setPopUpPanelVisibility(true);
   }
 });

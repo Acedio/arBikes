@@ -5,13 +5,29 @@
 let map;
 let markers = [];
 
+function formatScore(scores) {
+  var str = "<ol>";
+  for (var user in scores) {
+    str += `<li>${user}: ${scores[user]}</li>`
+  }
+  str += "</ol>";
+  return str;
+}
+
 function getAllBikes() {
   $.get('/getBikes', function(bikes) {
     console.log(JSON.stringify(bikes));
+    var scores = {};
     // Process all the bikes!
     for (let bike of bikes) {
       addMarker(bike);
+      if (bike.user in scores) {
+        scores[bike.user]++;
+      } else {
+        scores[bike.user] = 1;
+      }
     }
+    $('#bike-score').html(formatScore(scores));
   });
 }
 
