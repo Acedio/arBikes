@@ -21,7 +21,6 @@ app.get('/', function(req, res,next) {
   res.sendFile(__dirname + '/index.html');
 });
 
-
 var testBikes = [
   {
     user: 'goo',
