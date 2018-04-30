@@ -8,9 +8,19 @@
 </head>
 <body>
   <link rel="stylesheet" href="index.css">
+  <div class="div-score-panel">
+    <!--TODO: Populate this!-->
+    <p id="bike-score">Bikes claimed: 12</p>
+  </div>
+  <div class="pop-up-panel" hidden>
+    <form action="javascript:submitName()">
+      <label for="user_name">Enter name:</label>
+      <input id="user_name" type="text" name="name_field" value="Google">
+      <input type="submit" value="OK">
+    </form>
+  </div>  
   <div class="div-wrapper">
-    <div class="google-maps-container"
-      id="map">
+    <div class="google-maps-container" id="map">
     </iframe>
   </div>
 </body>
