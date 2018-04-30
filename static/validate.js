@@ -1,7 +1,7 @@
 (function(exports) {
   exports.validateCode = (code) => {
-    // TODO: Verify that it's a URL since jsQR seems a bit noisy.
-    return true;
+    // Verify that it's a URL since jsQR seems a bit noisy.
+    return code.startsWith('http');
   }
 
   exports.validateLocation = (location) => {
