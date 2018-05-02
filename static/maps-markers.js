@@ -6,10 +6,18 @@ let map;
 let markers = [];
 var scores;
 
+function processScores(scores) {
+  return Object.keys(scores).map((user) => {
+    return {user: user, score: scores[user]};
+  }).sort((a, b) => {
+    return a.score - b.score;
+  }).reverse();
+}
+
 function formatScore(scores) {
   var str = "<ol>";
-  for (var user in scores) {
-    str += `<li>${user}: ${scores[user]}</li>`
+  for (var score of processScores(scores)) {
+    str += `<li>${score.user}: ${score.score}</li>`
   }
   str += "</ol>";
   return str;
