@@ -8,14 +8,15 @@ const datastore = Datastore();
 
 exports.getBikes = functions.https.onRequest((req, res) => {
   const query = datastore.createQuery('Bike');
-  datastore.runQuery(query)
+  // TODO: share the bike query with addBike
+  return datastore.runQuery(query)
     .then((data) => {
       var entities = data[0];
-      res.status(200).send(entities);
+      return res.status(200).send(entities);
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send(err.message);
+      return res.status(500).send(err.message);
     });
 });
 
@@ -41,11 +42,13 @@ exports.addBike = functions.https.onRequest((req, res) => {
     data: found,
   };
 
-  datastore.save(entity)
-    .then((data) => res.status(200).send("Claimed!"))
+  return datastore.save(entity)
+    .then((data) => {
+      return res.status(200).send("Claimed!")
+    })
     .catch((err) => {
       console.error(err);
-      res.status(500).send(err.message);
+      return res.status(500).send(err.message);
     });
   /*
   if (!validate.validateCode(found.bikeId)) {
