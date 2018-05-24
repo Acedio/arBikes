@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const Datastore = require('@google-cloud/datastore');
+const validate = require('./shared/validate')
 
 // Instantiates a client
 const datastore = Datastore();
@@ -63,19 +64,15 @@ exports.addBike = functions.https.onRequest((req, res) => {
     lng: parseFloat(req.body.location.lng),
     acc: parseFloat(req.body.location.acc),
   };
-  /*
   if (!validate.validateLocation(found.location)) {
     console.log('Invalid location: ' + found.location);
     return;
   }
-  */
   found.bikeId = req.body.bikeId;
-  /*
   if (!validate.validateCode(found.bikeId)) {
     console.log('Invalid bikeId: ' + found.bikeId);
     return;
   }
-  */
 
   getBike(found.game, found.bikeId)
     .then(bike => {

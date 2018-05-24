@@ -1,3 +1,6 @@
+# copied from /shared in the predeploy step.
+*/shared
+
 # Keys etc
 encryption
 encryption/
