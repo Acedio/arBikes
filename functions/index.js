@@ -75,15 +75,15 @@ exports.addBike = functions.https.onRequest((req, res) => {
   };
   if (!validate.validateLocation(found.location)) {
     console.log('Invalid location: ' + found.location);
-    return;
+    return res.status(500).send('Invalid location.');
   }
   if (!validate.validateCode(req.body.bikeId)) {
     console.log('Invalid bikeId: ' + req.body.bikeId);
-    return;
+    return res.status(500).send('Invalid bikeId.');
   }
   found.bikeId = req.body.bikeId;
 
-  getBike(found.game, found.bikeId)
+  return getBike(found.game, found.bikeId)
     .then(bike => {
       // Simply add the bike if it's unclaimed.
       if (bike === null) {
@@ -103,7 +103,7 @@ exports.addBike = functions.https.onRequest((req, res) => {
 
         return saveBike(bike[datastore.KEY], bike)
           .then((data) => {
-            return res.send("Stolen!");
+            return res.status(200).send("Stolen!");
           });
       }
     })
