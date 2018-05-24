@@ -24,7 +24,7 @@ function formatScore(scores) {
 }
 
 function getAllBikes() {
-  $.get('/getBikes', function(bikes) {
+  $.get('/getBikes?game=' + bikeGameName, function(bikes) {
     console.log(JSON.stringify(bikes));
     scores = {};
     // Process all the bikes!

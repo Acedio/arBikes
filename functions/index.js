@@ -7,12 +7,14 @@ const datastore = Datastore();
 
 const BIKE_KIND = 'Bike';
 
-// TODO: shared validation
-
 exports.getBikes = functions.https.onRequest((req, res) => {
+  if (!req.query.game) {
+    console.error('No game specified.');
+    return res.status(500).send('No game specified.');
+  }
   const query = datastore
     .createQuery(BIKE_KIND)
-    .filter('game', '=', 'Fremont');  // TODO: Read this from req.body.game
+    .filter('game', '=', req.query.game);
 
   return datastore.runQuery(query)
     .then((data) => {
@@ -25,7 +27,7 @@ exports.getBikes = functions.https.onRequest((req, res) => {
     });
 });
 
-function getBike(game, bike) {
+function getBike(game, bikeId) {
   const query = datastore
     .createQuery(BIKE_KIND)
     .filter('game', '=', game)
@@ -45,6 +47,7 @@ function getBike(game, bike) {
     });
 }
 
+// bike is of type BIKE_KIND
 function saveBike(key, bike) {
   const entity = {
     key: key,
@@ -57,7 +60,13 @@ function saveBike(key, bike) {
 /** Takes {game, user, location: {lat, lng, acc}, bikeId} */
 exports.addBike = functions.https.onRequest((req, res) => {
   var found = {};
+  if (!req.body.user) {
+    console.log('Invalid username: ' + req.body.user);
+  }
   found.user = req.body.user;
+  if (!req.body.game) {
+    console.log('Invalid gamename: ' + req.body.game);
+  }
   found.game = req.body.game;
   found.location = {
     lat: parseFloat(req.body.location.lat),
@@ -68,11 +77,11 @@ exports.addBike = functions.https.onRequest((req, res) => {
     console.log('Invalid location: ' + found.location);
     return;
   }
-  found.bikeId = req.body.bikeId;
-  if (!validate.validateCode(found.bikeId)) {
-    console.log('Invalid bikeId: ' + found.bikeId);
+  if (!validate.validateCode(req.body.bikeId)) {
+    console.log('Invalid bikeId: ' + req.body.bikeId);
     return;
   }
+  found.bikeId = req.body.bikeId;
 
   getBike(found.game, found.bikeId)
     .then(bike => {

@@ -132,7 +132,6 @@
       };
 
       function success(pos) {
-        var username = bikeUserName;
         var crd = pos.coords;
         var location = {
           lat: crd.latitude,
@@ -142,7 +141,8 @@
 
         if (validate.validateLocation(location)) {
           $.post('/addBike', {
-            user: username,
+            user: bikeUserName,
+            game: bikeGameName,
             location: location,
             bikeId: data,
           }, function(res){
