@@ -1,27 +1,30 @@
 // TODO: Make this not a global variable but import this file into other scripts or some such.
 bikeUserName = '';
-bikeGameName = '';
 
 $(document).ready(function() {
   bikeUserName = Cookies.get('bikeUserName');
-  bikeGameName = Cookies.get('bikeGameName');
   // coookies returns actual string value undefined.
   if (bikeUserName == 'undefined' ||
-      bikeUserName == null ||
-      bikeGameName == 'undefined' ||
-      bikeGameName == null) {
+      bikeUserName == null) {
     setPopUpPanelVisibility(true);
   }
 });
 
 function submitName() {
-  bikeGameName = $('#game-name').val();
-  console.log(bikeGameName);
-  Cookies.set('bikeGameName', bikeGameName);
   bikeUserName = $('#user-name').val();
   console.log(bikeUserName);
   Cookies.set('bikeUserName', bikeUserName);
   setPopUpPanelVisibility(false);
+}
+
+function getGameNameFromUrl() {
+  const gameRegex = /game|scan\/([^\/]*)/;
+  const match = gameRegex.exec(window.location.pathname);
+  if (match) {
+    return Promise.resolve(match[1]);
+  } else {
+    return Promise.reject(new Error('Game name not found.'));
+  }
 }
 
 function setPopUpPanelVisibility(toShow) {

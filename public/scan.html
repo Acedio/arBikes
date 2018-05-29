@@ -5,9 +5,9 @@
   <title>Scan a Bike!</title>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-  <script src="user-name.js"></script>
-  <script src="shared/validate.js"></script>
-  <script src="jsQR.js"></script>
+  <script src="/user-name.js"></script>
+  <script src="/shared/validate.js"></script>
+  <script src="/jsQR.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Ropa+Sans" rel="stylesheet">
   <style>
     body {
@@ -122,6 +122,12 @@
       requestAnimationFrame(tick);
     }
 
+    function getCurrentPosition(options) {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, options);
+      });
+    }
+
     function attachPositionAndSendData(data) {
       var options = {
         enableHighAccuracy: true,
@@ -131,32 +137,32 @@
         maximumAge: 0
       };
 
-      function success(pos) {
-        var crd = pos.coords;
-        var location = {
-          lat: crd.latitude,
-          lng: crd.longitude,
-          acc: crd.accuracy,
-        };
+      return getCurrentPosition(options)
+        .then(pos => {
+          var crd = pos.coords;
+          var location = {
+            lat: crd.latitude,
+            lng: crd.longitude,
+            acc: crd.accuracy,
+          };
 
-        if (validate.validateLocation(location)) {
-          $.post('/addBike', {
-            user: bikeUserName,
-            game: bikeGameName,
-            location: location,
-            bikeId: data,
-          }, function(res){
-            alert(res);
-            window.location.replace("/");
-          });
-        }
-      }
-
-      function error(err) {
-        alert(`Error getting your coordinates, please scan again.\n\nERROR(${err.code}): ${err.message}`);
-      }
-
-      navigator.geolocation.getCurrentPosition(success, error, options);
+          if (validate.validateLocation(location)) {
+            // TODO
+            const gameName = getGameNameFromUrl();
+            $.post('/addBike', {
+              user: bikeUserName,
+              game: gameName,
+              location: location,
+              bikeId: data,
+            }, function(res){
+              alert(res);
+              window.location.replace("/game/" + gameName);
+            });
+          }
+        })
+        .catch(err => {
+          alert(`Error getting your coordinates, please scan again.\n\nERROR(${err.code}): ${err.message}`);
+        });
     }
   </script>
 </body>

@@ -12,7 +12,9 @@
     "public": "public",
     "rewrites": [
       { "source": "/addBike", "function": "addBike" },
-      { "source": "/getBikes", "function": "getBikes" }
+      { "source": "/getBikes", "function": "getBikes" },
+      { "source": "/game/**", "destination": "/game.html" },
+      { "source": "/scan/**", "destination": "/scan.html" }
     ],
     "ignore": [
       "firebase.json",

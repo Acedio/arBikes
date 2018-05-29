@@ -23,8 +23,8 @@ function formatScore(scores) {
   return str;
 }
 
-function getAllBikes() {
-  $.get('/getBikes?game=' + bikeGameName, function(bikes) {
+function getAllBikes(gameName) {
+  $.get('/getBikes?game=' + gameName, function(bikes) {
     console.log(JSON.stringify(bikes));
     scores = {};
     // Process all the bikes!
@@ -75,7 +75,8 @@ function initMap() {
   });
 
   // Adds a marker at the center of the map.
-  getAllBikes();
+  getGameNameFromUrl()
+    .then(getAllBikes);
 }
 
 // Adds a marker to the map and push to the array.
