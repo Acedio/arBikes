@@ -27,13 +27,14 @@ exports.getBikes = functions.https.onRequest((req, res) => {
     });
 });
 
-function getBike(game, bikeId) {
-  const query = datastore
+function getBike(transaction, game, bikeId) {
+  // TODO: queries inside transactions must have ancestors
+  const query = transaction
     .createQuery(BIKE_KIND)
     .filter('game', '=', game)
     .filter('bikeId', '=', bikeId);
 
-  return datastore.runQuery(query)
+  return transaction.runQuery(query)
     .then((data) => {
       var entities = data[0];
       if (entities.length > 1) {
@@ -48,13 +49,13 @@ function getBike(game, bikeId) {
 }
 
 // bike is of type BIKE_KIND
-function saveBike(key, bike) {
+function saveBike(transaction, key, bike) {
   const entity = {
     key: key,
     data: bike,
   };
 
-  return datastore.save(entity);
+  return transaction.save(entity);
 }
 
 /** Takes {game, user, location: {lat, lng, acc}, bikeId} */
@@ -83,31 +84,40 @@ exports.addBike = functions.https.onRequest((req, res) => {
   }
   found.bikeId = req.body.bikeId;
 
-  return getBike(found.game, found.bikeId)
+  const transaction = datastore.transaction();
+
+  return transaction
+    .run()
+    .then(() => getBike(transaction, found.game, found.bikeId))
     .then(bike => {
       // Simply add the bike if it's unclaimed.
       if (bike === null) {
-        return saveBike(datastore.key(BIKE_KIND), found)
+        return saveBike(transaction, datastore.key(BIKE_KIND), found)
           .then((data) => {
-            return res.status(200).send("Claimed!")
+            return "Claimed!";
           });
       }
 
       if (bike.user === found.user) {
-        return res.status(200).send("You already own this bike!");
+        return "You already own this bike!";
       } else {
         const entity = {
           key: bike[datastore.KEY],
           data: found,
         };
 
-        return saveBike(bike[datastore.KEY], bike)
+        return saveBike(transaction, bike[datastore.KEY], bike)
           .then((data) => {
-            return res.status(200).send("Stolen!");
+            return "Stolen!";
           });
       }
     })
+    .then((result_str) => {
+      transaction.commit();
+      return res.status(200).send(result_str);
+    })
     .catch((err) => {
+      transaction.rollback();
       console.error(err);
       return res.status(500).send(err.message);
     });
