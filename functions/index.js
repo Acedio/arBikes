@@ -5,7 +5,12 @@ const validate = require('./shared/validate')
 // Instantiates a client
 const datastore = Datastore();
 
+const GAME_KIND = 'Game';
 const BIKE_KIND = 'Bike';
+
+function getGameKey(gameName) {
+  return datastore.key([GAME_KIND, gameName]);
+}
 
 exports.getBikes = functions.https.onRequest((req, res) => {
   if (!req.query.game) {
@@ -14,7 +19,7 @@ exports.getBikes = functions.https.onRequest((req, res) => {
   }
   const query = datastore
     .createQuery(BIKE_KIND)
-    .filter('game', '=', req.query.game);
+    .hasAncestor(getGameKey(req.query.game));
 
   return datastore.runQuery(query)
     .then((data) => {
@@ -28,10 +33,9 @@ exports.getBikes = functions.https.onRequest((req, res) => {
 });
 
 function getBike(transaction, game, bikeId) {
-  // TODO: queries inside transactions must have ancestors
   const query = transaction
     .createQuery(BIKE_KIND)
-    .filter('game', '=', game)
+    .hasAncestor(getGameKey(game))
     .filter('bikeId', '=', bikeId);
 
   return transaction.runQuery(query)
@@ -55,7 +59,7 @@ function saveBike(transaction, key, bike) {
     data: bike,
   };
 
-  return transaction.save(entity);
+  transaction.save(entity);
 }
 
 /** Takes {game, user, location: {lat, lng, acc}, bikeId} */
@@ -92,10 +96,10 @@ exports.addBike = functions.https.onRequest((req, res) => {
     .then(bike => {
       // Simply add the bike if it's unclaimed.
       if (bike === null) {
-        return saveBike(transaction, datastore.key(BIKE_KIND), found)
-          .then((data) => {
-            return "Claimed!";
-          });
+        saveBike(
+            transaction, datastore.key([GAME_KIND, found.game, BIKE_KIND]),
+            found);
+        return "Claimed!";
       }
 
       if (bike.user === found.user) {
@@ -106,10 +110,8 @@ exports.addBike = functions.https.onRequest((req, res) => {
           data: found,
         };
 
-        return saveBike(transaction, bike[datastore.KEY], bike)
-          .then((data) => {
-            return "Stolen!";
-          });
+        saveBike(transaction, bike[datastore.KEY], found);
+        return "Stolen!";
       }
     })
     .then((result_str) => {
