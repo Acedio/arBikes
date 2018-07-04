@@ -1,0 +1,34 @@
+<html>
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+  <script src="/maps-markers.js"></script>
+  <script src="/user-name.js"></script>
+  <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA13QFADYjV4lLRg_HPrl622vVb4L4v8s4&callback=initMap">
+  </script>
+</head>
+<body>
+  <link rel="stylesheet" href="/game.css">
+  <div class="div-score-panel">
+    <h1>🚲 Bike Thief 🚲</h1>
+    <div id="bike-score">Scores Loading...</div>
+  </div>
+  <div class="pop-up-panel" hidden>
+    <form action="javascript:submitName()">
+      <label for="user-name">Enter name:</label>
+      <input id="user-name" type="text" name="name-field" value="Anonymous">
+      <input type="submit" value="OK">
+    </form>
+  </div>  
+  <div class="div-wrapper">
+    <div class="google-maps-container" id="map">
+    </iframe>
+  </div>
+  <div class="div-buttons">
+    <!-- TODO: link to the game-specific scan page -->
+    <h1><a href="/scan.html">Scan!</a></h1>
+  </div>
+</body>
+</html>
