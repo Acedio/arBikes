@@ -55,8 +55,8 @@ function buildBikeImage(imageName) {
 }
 
 function initMap() {
-  myBikeImage = buildBikeImage('images/blueBike.png');
-  theirBikeImage = buildBikeImage('images/redBike.png');
+  myBikeImage = buildBikeImage('/images/blueBike.png');
+  theirBikeImage = buildBikeImage('/images/redBike.png');
   
   shape = {
     coords: [1, 1, 1, 32, 32, 1, 32, 32],
