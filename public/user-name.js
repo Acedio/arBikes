@@ -18,7 +18,7 @@ function submitName() {
 }
 
 function getGameNameFromUrl() {
-  const gameRegex = /game|scan\/([^\/]*)/;
+  const gameRegex = /(?:game|scan)\/([^\/]*)/;
   const match = gameRegex.exec(window.location.pathname);
   if (match) {
     return Promise.resolve(match[1]);

@@ -74,7 +74,6 @@ function initMap() {
     mapTypeId: 'terrain'
   });
 
-  // Adds a marker at the center of the map.
   getGameNameFromUrl()
     .then(getAllBikes);
 }
