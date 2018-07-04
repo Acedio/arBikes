@@ -147,16 +147,18 @@
           };
 
           if (validate.validateLocation(location)) {
-            // TODO
-            const gameName = getGameNameFromUrl();
-            $.post('/addBike', {
-              user: bikeUserName,
-              game: gameName,
-              location: location,
-              bikeId: data,
-            }, function(res){
-              alert(res);
-              window.location.replace("/game/" + gameName);
+            // TODO: This location getting and game name stuff should be in
+            // an all().
+            getGameNameFromUrl().then(gameName => {
+              $.post('/addBike', {
+                user: bikeUserName,
+                game: gameName,
+                location: location,
+                bikeId: data,
+              }, function(res){
+                alert(res);
+                window.location.replace("/game/" + gameName);
+              });
             });
           }
         })
