@@ -15,15 +15,23 @@ function processScores(scores) {
 }
 
 function formatScore(scores) {
-  var str = "<ol>";
-  for (var score of processScores(scores)) {
-    str += `<li>${score.user}: ${score.score}</li>`
+  if (Object.keys(scores).length == 0) {
+    return "<p>Nobody has scored yet!</p>";
+  } else {
+    var str = "<ol>";
+    for (var score of processScores(scores)) {
+      str += `<li>${score.user}: ${score.score}</li>`
+    }
+    str += "</ol>";
+    return str;
   }
-  str += "</ol>";
-  return str;
 }
 
-function getAllBikes(gameName) {
+function displayGame(gameName) {
+  // Update the scan link so it points to the scan page for this game.
+  $('#scan-link').attr('href', '/scan/' + gameName);
+  $('#game-name').html(gameName);
+
   $.get('/getBikes?game=' + gameName, function(bikes) {
     console.log(JSON.stringify(bikes));
     scores = {};
@@ -75,7 +83,7 @@ function initMap() {
   });
 
   getGameNameFromUrl()
-    .then(getAllBikes);
+    .then(displayGame);
 }
 
 // Adds a marker to the map and push to the array.

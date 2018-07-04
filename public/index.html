@@ -2,8 +2,26 @@
 <head>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+  <script>
+    function goToGame() {
+      var gameName = document.getElementById('game-name').value;
+      if (!gameName) {
+        return false;
+      }
+
+      window.location.href = '/game/' + gameName;
+      return false;  // Stop the submit.
+    }
+  </script>
 </head>
 <body>
-  <a href="/game/Fremont">Fremont game</a>
+  <h1>🚲 Bike Thief 🚲</h1>
+  <div>
+    <p>Join a game!</p>
+    <form onsubmit="return goToGame()">
+      Game name: <input type="text" id="game-name" value="Fremont"/>
+      <input type="submit"/>
+    </form>
+  </div>
 </body>
 </html>
