@@ -2,12 +2,19 @@
 <head>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+  <script src="user-name.js">  </script>
   <script>
-    function goToGame() {
+    function joinGame() {
       var gameName = document.getElementById('game-name').value;
       if (!gameName) {
         return false;
       }
+      var userName = document.getElementById('user-name').value;
+      if (!userName) {
+        return false;
+      }
+
+      setUserName(userName);
 
       window.location.href = '/game/' + gameName;
       return false;  // Stop the submit.
@@ -18,8 +25,9 @@
   <h1>🚲 Bike Thief 🚲</h1>
   <div>
     <p>Join a game!</p>
-    <form onsubmit="return goToGame()">
-      Game name: <input type="text" id="game-name" value="Fremont"/>
+    <form onsubmit="return joinGame()">
+      Game name: <input type="text" id="game-name" value="Fremont" placeholder="Fremont"/>
+      User name: <input type="text" id="user-name" value="" placeholder="user"/>
       <input type="submit"/>
     </form>
   </div>

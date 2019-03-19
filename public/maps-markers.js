@@ -27,17 +27,18 @@ function formatScore(scores) {
   }
 }
 
-function displayGame(gameName) {
+function displayGame(gameName, userName) {
   // Update the scan link so it points to the scan page for this game.
   $('#scan-link').attr('href', '/scan/' + gameName);
   $('#game-name').html(gameName);
+  $('#user-name').html(userName);
 
   $.get('/getBikes?game=' + gameName, function(bikes) {
     console.log(JSON.stringify(bikes));
     scores = {};
     // Process all the bikes!
     for (let bike of bikes) {
-      addMarker(bike);
+      addMarker(bike, bike.user == userName);
       if (bike.user in scores) {
         scores[bike.user]++;
       } else {
@@ -82,12 +83,17 @@ function initMap() {
     mapTypeId: 'terrain'
   });
 
-  getGameNameFromUrl()
-    .then(displayGame);
+  Promise.all([getGameNameFromUrl(), getUserName()])
+    .then(values => {
+      displayGame(values[0], values[1]);
+    })
+    .catch(error => {
+      window.location.replace(window.location.host);
+    });
 }
 
 // Adds a marker to the map and push to the array.
-function addMarker(bike) {
+function addMarker(bike, ownedByCurrentUser) {
   let bikeId = bike.bikeId.replace(/[\W_]+/g,'');
   var infoWindow = new google.maps.InfoWindow({
     content: '<div id="' + bikeId + '"></div>'
@@ -95,7 +101,7 @@ function addMarker(bike) {
   var marker = new google.maps.Marker({
     position: bike.location,
     map: map,
-    icon: bike.user == bikeUserName ? myBikeImage : theirBikeImage,
+    icon: ownedByCurrentUser ? myBikeImage : theirBikeImage,
     shape: shape,
   });
   marker.addListener('click', function() {
